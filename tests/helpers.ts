@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import Database from "../../src/models/database";
-import Graph from "../../src/models/graph";
-import Node from "../../src/models/node";
-import Relationship from "../../src/models/relationship";
+import Database from "../src/models/database";
+import Graph from "../src/models/graph";
+import Node from "../src/models/node";
+import Relationship from "../src/models/relationship";
 
 export function testRelationship({
   id = 0,

@@ -6,7 +6,7 @@ export default class Graph implements MetadataGenerable {
   constructor(
     readonly id: number,
     private name: string,
-    private nodes: Node[]
+    private nodes: Node[] = []
   ) {}
 
   metadata(): Metadata {
