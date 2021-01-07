@@ -8,6 +8,7 @@ export default class Database implements MetadataGenerable {
     private name: string,
     private graphs: Graph[] = []
   ) {}
+
   metadata(): Metadata {
     const graphIds: number[] = [];
     this.graphs.forEach((graph) => graphIds.push(graph.id));

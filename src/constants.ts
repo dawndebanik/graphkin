@@ -4,3 +4,5 @@ export enum Models {
   NODE = "node",
   RELATIONSHIP = "relationship",
 }
+
+export const META_DATA_LOCATION = __dirname + "/metadata/";

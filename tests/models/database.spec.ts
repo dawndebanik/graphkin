@@ -6,7 +6,6 @@ describe("Database Model", () => {
     const db = new Database(42, "very-important-db");
 
     const metadata = db.metadata();
-
     expect(metadata).toEqual({
       id: 42,
       type: "database",
@@ -27,7 +26,6 @@ describe("Database Model", () => {
     });
 
     const metadata = db.metadata();
-
     expect(metadata).toEqual({
       id: 42,
       type: "database",
