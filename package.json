@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node_modules/.bin/tsc && node .",
     "lint": "node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "test": "node_modules/.bin/jest ."
+    "test": "node_modules/.bin/jest .",
+    "test:coverage": "node_modules/.bin/jest . --coverage"
   },
   "author": "Debanik Dawn",
   "license": "MIT",

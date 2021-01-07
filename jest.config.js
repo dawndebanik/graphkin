@@ -5,4 +5,5 @@ module.exports = {
     "^.+\\.(ts|tsx)?$": "ts-jest",
     "^.+\\.(js|jsx)$": "babel-jest",
   },
+  coveragePathIgnorePatterns: ["tests"],
 };
