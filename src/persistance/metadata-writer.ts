@@ -1,5 +1,5 @@
 import { Metadata } from "../metadata/MetadataGenerable";
-import { META_DATA_LOCATION } from "../constants";
+import { META_DATA_PATH_KEY } from "../constants";
 
 export default class MetadataWriter {
   private _fs: any;
@@ -8,9 +8,10 @@ export default class MetadataWriter {
     this._fs = fs;
   }
 
-  writeMetadata(metaData: Metadata) {
-    const fileName: string = metaData.type + ".dat";
-    const fileLocation = META_DATA_LOCATION + "/" + fileName;
+  writeMetadata(metaData: Metadata): void {
+    const fileName: string = metaData.id + ".dat";
+    const fileLocation =
+      process.env[META_DATA_PATH_KEY] + metaData.type + "/" + fileName;
     this._fs.writeFileSync(
       fileLocation,
       JSON.stringify(metaData.data),
