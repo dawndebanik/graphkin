@@ -8,13 +8,16 @@ jest.mock("fs");
 describe("Persistent metadata", () => {
   it("should generate metadata for a node", () => {
     const node = new Node(32);
-    const metaData = node.metadata();
     process.env[META_DATA_PATH_KEY] = __dirname + "/metadata/";
     const metadataWriter = new MetadataWriter(fs);
+
+    node.connectTo(node, 5);
+    const metaData = node.metadata();
     metadataWriter.writeMetadata(metaData);
+
     expect(fs.writeFileSync).toHaveBeenCalledWith(
-      __dirname + "/metadata/" + metaData.type + "/" + metaData.id + ".dat",
-      JSON.stringify(metaData.data),
+      __dirname + "/metadata/node/32.dat",
+      '{"relationshipIds":[5]}',
       "utf-8"
     );
   });
