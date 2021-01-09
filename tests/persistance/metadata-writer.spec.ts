@@ -9,7 +9,7 @@ describe("Persistent metadata", () => {
   it("should generate metadata for a node", () => {
     const node = new Node(32);
     process.env[META_DATA_PATH_KEY] = __dirname + "/metadata/";
-    const metadataWriter = new MetadataWriter(fs);
+    const metadataWriter = new MetadataWriter();
 
     node.connectTo(node, 5);
     const metaData = node.metadata();
