@@ -15,12 +15,14 @@ export default class MetadataWriter {
       "/types/" +
       typeFileName;
     //Creating the typeFile.
-    let typeData: string[] = [];
-    if (fs.existsSync(typeFileLocation)) {
-      typeData = JSON.parse(fs.readFileSync(typeFileLocation, "utf-8"));
+    if (metaData.type) {
+      let typeData: string[] = [];
+      if (fs.existsSync(typeFileLocation)) {
+        typeData = JSON.parse(fs.readFileSync(typeFileLocation, "utf-8"));
+      }
+      typeData.push(String(metaData.id));
+      _writeDataToFile(typeFileLocation, JSON.stringify(typeData));
     }
-    typeData.push(String(metaData.id));
-    _writeDataToFile(typeFileLocation, JSON.stringify(typeData));
   }
 }
 
