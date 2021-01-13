@@ -1,5 +1,5 @@
-import { Models } from "../constants";
-import MetadataGenerable, { Metadata } from "../metadata/MetadataGenerable";
+import {Models} from "../constants";
+import MetadataGenerable, {Metadata} from "../metadata/MetadataGenerable";
 import Node from "./node";
 
 export default class Graph implements MetadataGenerable {
@@ -14,7 +14,7 @@ export default class Graph implements MetadataGenerable {
     this.nodes.forEach((node) => nodeIds.push(node.id));
 
     return {
-      type: Models.GRAPH,
+      modelName: Models.GRAPH,
       id: this.id,
       data: {
         name: this.name,

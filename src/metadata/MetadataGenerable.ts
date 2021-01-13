@@ -1,8 +1,9 @@
-import { Models } from "../constants";
+import {Models} from "../constants";
 
 export type Metadata = {
-  type: Models;
+  modelName: Models;
   id: number;
+  type?: string;
   data: unknown;
 };
 

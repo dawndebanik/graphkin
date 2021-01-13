@@ -1,6 +1,6 @@
-import { Models } from "../constants";
+import {Models} from "../constants";
 import Graph from "./graph";
-import MetadataGenerable, { Metadata } from "../metadata/MetadataGenerable";
+import MetadataGenerable, {Metadata} from "../metadata/MetadataGenerable";
 
 export default class Database implements MetadataGenerable {
   constructor(
@@ -14,7 +14,7 @@ export default class Database implements MetadataGenerable {
     this.graphs.forEach((graph) => graphIds.push(graph.id));
 
     return {
-      type: Models.DATABASE,
+      modelName: Models.DATABASE,
       id: this.id,
       data: {
         name: this.name,
