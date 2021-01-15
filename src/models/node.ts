@@ -1,8 +1,9 @@
 import { Models } from "../constants";
-import MetadataGenerable, { Metadata } from "../metadata/MetadataGenerable";
+import CoreDataGenerable, { CoreData } from "../core-data/core-data-generable";
+import MetadataGenerable, { Metadata } from "../metadata/metadata-generable";
 import Relationship from "./relationship";
 
-export default class Node implements MetadataGenerable {
+export default class Node implements MetadataGenerable, CoreDataGenerable {
   constructor(
     readonly id: number,
     private _relationships: Relationship[] = [],
@@ -11,6 +12,14 @@ export default class Node implements MetadataGenerable {
 
   get relationships(): Relationship[] {
     return this._relationships;
+  }
+
+  coreData(): CoreData {
+    return {
+      type: Models.NODE,
+      id: this.id,
+      data: this.data,
+    };
   }
 
   metadata(): Metadata {

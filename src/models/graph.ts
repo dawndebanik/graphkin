@@ -1,5 +1,5 @@
 import { Models } from "../constants";
-import MetadataGenerable, { Metadata } from "../metadata/MetadataGenerable";
+import MetadataGenerable, { Metadata } from "../metadata/metadata-generable";
 import Node from "./node";
 
 export default class Graph implements MetadataGenerable {

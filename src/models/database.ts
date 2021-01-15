@@ -1,6 +1,6 @@
 import { Models } from "../constants";
 import Graph from "./graph";
-import MetadataGenerable, { Metadata } from "../metadata/MetadataGenerable";
+import MetadataGenerable, { Metadata } from "../metadata/metadata-generable";
 
 export default class Database implements MetadataGenerable {
   constructor(

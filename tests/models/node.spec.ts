@@ -54,4 +54,19 @@ describe("Node Model", () => {
     expect(node.relationships).toContainEqual(new Relationship(0, node, node));
     expect(node.relationships.length).toBe(1);
   });
+
+  it("should generate core data stored in the node", () => {
+    const coreData = {
+      to: "be",
+      or: "not",
+    };
+
+    const actualCoreData = new Node(42, undefined, coreData).coreData();
+
+    expect(actualCoreData).toEqual({
+      type: "node",
+      id: 42,
+      data: coreData,
+    });
+  });
 });

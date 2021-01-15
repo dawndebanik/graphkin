@@ -1,4 +1,4 @@
-import { Metadata } from "../metadata/MetadataGenerable";
+import { Metadata } from "../metadata/metadata-generable";
 import { META_DATA_PATH_KEY } from "../constants";
 import fs from "fs";
 

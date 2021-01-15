@@ -18,4 +18,25 @@ describe("Relationship Model", () => {
       },
     });
   });
+
+  it("should generate core data stored in the relationship", () => {
+    const coreData = {
+      to: "be",
+      or: "not",
+    };
+    const dummyNode = new Node(1);
+
+    const actualCoreData = new Relationship(
+      42,
+      dummyNode,
+      dummyNode,
+      coreData
+    ).coreData();
+
+    expect(actualCoreData).toEqual({
+      type: "relationship",
+      id: 42,
+      data: coreData,
+    });
+  });
 });
