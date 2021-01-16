@@ -1,0 +1,12 @@
+os: osx
+language: node_js
+node_js: --lts
+cache: npm
+jobs:
+  include:
+    - stage: Test
+      name: "Run linter"
+      script: npm run lint
+    - stage: Test
+      name: "Run tests with coverage"
+      script: npm run test:coverage
