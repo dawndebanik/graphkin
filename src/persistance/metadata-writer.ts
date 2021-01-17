@@ -1,28 +1,28 @@
-import {Metadata} from "../metadata/MetadataGenerable";
-import {META_DATA_PATH_KEY} from "../constants";
+import { Metadata } from "../metadata/MetadataGenerable";
+import { META_DATA_PATH_KEY } from "../constants";
 import fs from "fs";
+
+const DATA_FILE_EXTENSION = "dat";
 
 export default class MetadataWriter {
   writeMetadata(metaData: Metadata): void {
-    const fileName: string = metaData.id + ".dat";
-    const fileLocation =
-      process.env[META_DATA_PATH_KEY] + metaData.modelName + "/" + fileName;
-    _writeDataToFile(fileLocation, JSON.stringify(metaData.data));
-    const typeFileName = metaData.type + ".dat";
-    const typeFileLocation =
-      process.env[META_DATA_PATH_KEY] +
-      metaData.modelName +
-      "/types/" +
-      typeFileName;
-    //Creating the typeFile.
+    const metadataRootDir = process.env[META_DATA_PATH_KEY];
+
     if (metaData.type) {
-      let typeData: string[] = [];
-      if (fs.existsSync(typeFileLocation)) {
-        typeData = JSON.parse(fs.readFileSync(typeFileLocation, "utf-8"));
+      const fileName = `${metaData.type}.${DATA_FILE_EXTENSION}`;
+      const fileLocation = `${metadataRootDir}/${metaData.modelName}/types/${fileName}`;
+
+      let typeData: number[] = [];
+      if (fs.existsSync(fileLocation)) {
+        typeData = JSON.parse(fs.readFileSync(fileLocation, "utf-8"));
       }
-      typeData.push(String(metaData.id));
-      _writeDataToFile(typeFileLocation, JSON.stringify(typeData));
+      typeData.push(metaData.id);
+      _writeDataToFile(fileLocation, JSON.stringify(typeData));
     }
+
+    const fileName = `${metaData.id}.${DATA_FILE_EXTENSION}`;
+    const fileLocation = `${metadataRootDir}/${metaData.modelName}/${fileName}`;
+    _writeDataToFile(fileLocation, JSON.stringify(metaData.data));
   }
 }
 
