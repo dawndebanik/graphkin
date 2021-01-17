@@ -5,7 +5,7 @@ import Relationship from "./relationship";
 export default class Node implements MetadataGenerable {
   constructor(
     readonly id: number,
-    private type?: string,
+    private type: string,
     private _relationships: Relationship[] = [],
     private data: unknown = {}
   ) {}

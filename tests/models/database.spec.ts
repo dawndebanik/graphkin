@@ -1,5 +1,5 @@
 import Database from "../../src/models/database";
-import { testDatabase, testGraph } from "../helpers";
+import {testDatabase, testGraph} from "../helpers";
 
 describe("Database Model", () => {
   it("should generate proper metadata for empty database", () => {
@@ -8,7 +8,7 @@ describe("Database Model", () => {
     const metadata = db.metadata();
     expect(metadata).toEqual({
       id: 42,
-      type: "database",
+      modelName: "database",
       data: {
         name: "very-important-db",
         graphIds: [],
@@ -28,7 +28,7 @@ describe("Database Model", () => {
     const metadata = db.metadata();
     expect(metadata).toEqual({
       id: 42,
-      type: "database",
+      modelName: "database",
       data: {
         name: "db-with-3-graphs",
         graphIds: [1, 2, 3],

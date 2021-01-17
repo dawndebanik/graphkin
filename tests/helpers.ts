@@ -9,8 +9,8 @@ export function testRelationship({
   leftNodeId = 0,
   rightNodeId = 0,
 }): Relationship {
-  const leftNode = new Node(leftNodeId);
-  const rightNode = new Node(rightNodeId);
+  const leftNode = new Node(leftNodeId, "Distance");
+  const rightNode = new Node(rightNodeId, "Distance");
 
   return new Relationship(id, leftNode, rightNode);
 }
@@ -21,10 +21,10 @@ export function testNode({ id = 0, relationships = [], data = {} }): Node {
       leftNodeId: id,
       rightNodeId: id,
     });
-    return new Node(id, [dummyRelationship], data);
+    return new Node(id, "Distance", [dummyRelationship], data);
   }
 
-  return new Node(id, relationships, data);
+  return new Node(id, "Distance", relationships, data);
 }
 
 export function testGraph({
@@ -39,6 +39,7 @@ export function testGraph({
 
   return new Graph(id, name, nodes);
 }
+
 export function testDatabase({
   id = 0,
   name = "test",

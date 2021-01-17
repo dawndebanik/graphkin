@@ -3,13 +3,14 @@ import Relationship from "../../src/models/relationship";
 
 describe("Node Model", () => {
   it("should generate metadata for a single, unconnected node", () => {
-    const node = new Node(42);
+    const node = new Node(42, "Distance");
 
     const metadata = node.metadata();
 
     expect(metadata).toEqual({
-      type: "node",
+      modelName: "node",
       id: 42,
+      type: "Distance",
       data: {
         relationshipIds: [],
       },
@@ -17,7 +18,7 @@ describe("Node Model", () => {
   });
 
   it("should generate metadata for a node having relationships with ids 1, 2, 3", () => {
-    const node = new Node(42);
+    const node = new Node(42, "Person");
     node.connectTo(node, 1);
     node.connectTo(node, 2);
     node.connectTo(node, 3);
@@ -25,7 +26,8 @@ describe("Node Model", () => {
     const metadata = node.metadata();
 
     expect(metadata).toEqual({
-      type: "node",
+      modelName: "node",
+      type: "Person",
       id: 42,
       data: {
         relationshipIds: [1, 2, 3],
@@ -34,8 +36,8 @@ describe("Node Model", () => {
   });
 
   it("should connect to another node which is not this node", () => {
-    const node = new Node(1);
-    const other = new Node(2);
+    const node = new Node(1, "Distance");
+    const other = new Node(2, "Distance");
 
     node.connectTo(other, 0);
 
@@ -47,7 +49,7 @@ describe("Node Model", () => {
     expect(other.relationships.length).toBe(1);
   });
   it("should connect to itself", () => {
-    const node = new Node(1);
+    const node = new Node(1, "Distance");
 
     node.connectTo(node, 0);
 
