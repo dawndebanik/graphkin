@@ -1,5 +1,5 @@
-import { Metadata } from "../metadata/MetadataGenerable";
-import { META_DATA_PATH_KEY } from "../constants";
+import {Metadata} from "../metadata/MetadataGenerable";
+import {META_DATA_PATH_KEY} from "../constants";
 import fs from "fs";
 
 const DATA_FILE_EXTENSION = "dat";
@@ -13,9 +13,11 @@ export default class MetadataWriter {
       const fileLocation = `${metadataRootDir}/${metaData.modelName}/types/${fileName}`;
 
       let typeData: number[] = [];
-      if (fs.existsSync(fileLocation)) {
+      try {
+        fs.accessSync(fileLocation, fs.constants.W_OK | fs.constants.R_OK);
         typeData = JSON.parse(fs.readFileSync(fileLocation, "utf-8"));
-      }
+      } catch (e) {}
+
       typeData.push(metaData.id);
       _writeDataToFile(fileLocation, JSON.stringify(typeData));
     }
