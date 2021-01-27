@@ -4,4 +4,4 @@ export enum Models {
   NODE = "node",
   RELATIONSHIP = "relationship",
 }
-export const META_DATA_PATH_KEY = "META_DATA_PATH";
+export const ROOT_DIRECTORY_PATH_KEY = "ROOT_DIRECTORY";
