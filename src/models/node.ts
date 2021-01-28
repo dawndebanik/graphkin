@@ -1,21 +1,28 @@
-import Relationship from "./relationship";
-
 export default class Node {
   constructor(
     readonly id: number,
-    private _relationships: Relationship[] = [],
-    private data: unknown = {}
+    private _relationshipIds: number[] = [],
+    private _type: string,
+    private _data: unknown = {}
   ) {}
 
-  get relationships(): Relationship[] {
-    return this._relationships;
+  get relationshipIds(): number[] {
+    return this.relationshipIds;
   }
 
-  connectTo(otherNode: Node, relationshipId: number): void {
+  get type(): string {
+    return this._type;
+  }
+
+  get data(): unknown {
+    return this._data;
+  }
+
+  /*connectTo(otherNode: Node, relationshipId: number): void {
     const newRelationship = new Relationship(relationshipId, this, otherNode);
     this._relationships.push(newRelationship);
     if (otherNode !== this) {
       otherNode._relationships.push(newRelationship);
     }
-  }
+  }*/
 }
