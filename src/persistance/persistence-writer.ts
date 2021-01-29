@@ -1,17 +1,12 @@
-import {
-  DATABASE_FOLDER_NAME_KEY,
-  ROOT_DIRECTORY_PATH_KEY,
-} from "../constants";
-import { promises as fs } from "fs";
+import {DATABASE_FOLDER_NAME_KEY, ROOT_DIRECTORY_PATH_KEY,} from "../constants";
+import {promises as fs} from "fs";
 
 export default class PersistenceWriter {
   private async makeFolder(folderLocation: string): Promise<boolean> {
     const stat = await fs.stat(folderLocation);
-
     if (stat.isDirectory()) {
-      return Promise.resolve(false);
+      return Promise.resolve(true);
     }
-
     try {
       await fs.mkdir(folderLocation);
       return Promise.resolve(true);
