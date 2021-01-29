@@ -1,25 +1,15 @@
-import { Models } from "../constants";
-import Graph from "./graph";
-import MetadataGenerable, { Metadata } from "../metadata/MetadataGenerable";
+export default class Database {
+  private readonly _name: string;
+  private _graphNames: string[];
+  constructor(private __name: string, private __graphNames: string[] = []) {
+    this._name = __name;
+    this._graphNames = __graphNames;
+  }
 
-export default class Database implements MetadataGenerable {
-  constructor(
-    private id: number,
-    private name: string,
-    private graphs: Graph[] = []
-  ) {}
-
-  metadata(): Metadata {
-    const graphIds: number[] = [];
-    this.graphs.forEach((graph) => graphIds.push(graph.id));
-
-    return {
-      type: Models.DATABASE,
-      id: this.id,
-      data: {
-        name: this.name,
-        graphIds,
-      },
-    };
+  get name(): string {
+    return this._name;
+  }
+  get graphName(): string[] {
+    return this._graphNames;
   }
 }

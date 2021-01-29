@@ -1,36 +1,28 @@
-import { Models } from "../constants";
-import MetadataGenerable, { Metadata } from "../metadata/MetadataGenerable";
-import Relationship from "./relationship";
-
-export default class Node implements MetadataGenerable {
+export default class Node {
   constructor(
     readonly id: number,
-    private _relationships: Relationship[] = [],
-    private data: unknown = {}
+    private _relationshipIds: number[] = [],
+    private _type: string,
+    private _data: unknown = {}
   ) {}
 
-  get relationships(): Relationship[] {
-    return this._relationships;
+  get relationshipIds(): number[] {
+    return this.relationshipIds;
   }
 
-  metadata(): Metadata {
-    const relationshipIds: number[] = [];
-    this._relationships.forEach((relationship) =>
-      relationshipIds.push(relationship.id)
-    );
-
-    return {
-      type: Models.NODE,
-      id: this.id,
-      data: { relationshipIds },
-    };
+  get type(): string {
+    return this._type;
   }
 
-  connectTo(otherNode: Node, relationshipId: number): void {
+  get data(): unknown {
+    return this._data;
+  }
+
+  /*connectTo(otherNode: Node, relationshipId: number): void {
     const newRelationship = new Relationship(relationshipId, this, otherNode);
     this._relationships.push(newRelationship);
     if (otherNode !== this) {
       otherNode._relationships.push(newRelationship);
     }
-  }
+  }*/
 }
