@@ -1,5 +1,8 @@
-import {DATABASE_FOLDER_NAME_KEY, ROOT_DIRECTORY_PATH_KEY,} from "../constants";
-import {promises as fs} from "fs";
+import {
+  DATABASE_FOLDER_NAME_KEY,
+  ROOT_DIRECTORY_PATH_KEY,
+} from "../constants";
+import { promises as fs } from "fs";
 
 export default class PersistenceWriter {
   private async makeFolder(folderLocation: string): Promise<boolean> {

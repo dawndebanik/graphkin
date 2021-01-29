@@ -1,6 +1,9 @@
 import PersistenceWriter from "../../src/persistance/persistence-writer";
 import fs from "fs";
-import {DATABASE_FOLDER_NAME_KEY, ROOT_DIRECTORY_PATH_KEY,} from "../../src/constants";
+import {
+  DATABASE_FOLDER_NAME_KEY,
+  ROOT_DIRECTORY_PATH_KEY,
+} from "../../src/constants";
 
 jest.mock("fs");
 describe("Persistence Writer", () => {

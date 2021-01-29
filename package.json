@@ -5,7 +5,8 @@
   "main": "build/app.js",
   "scripts": {
     "start": "node_modules/.bin/tsc && node .",
-    "lint": "node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "lint:check": "node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet",
+    "lint:fix": "node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "test": "node_modules/.bin/jest .",
     "test:coverage": "node_modules/.bin/jest . --coverage"
   },
