@@ -2,6 +2,7 @@ import PersistenceWriter from "../../src/persistance/persistence-writer";
 import fs from "fs";
 import {
   DATABASE_FOLDER_NAME_KEY,
+  GRAPH_FOLDER_NAME_KEY,
   ROOT_DIRECTORY_PATH_KEY,
 } from "../../src/constants";
 
@@ -9,52 +10,85 @@ jest.mock("fs");
 describe("Persistence Writer", () => {
   process.env[ROOT_DIRECTORY_PATH_KEY] = "root";
   process.env[DATABASE_FOLDER_NAME_KEY] = "databases";
-  it("should create db when it doesn't exist", async () => {
-    const mockStat = {
-      isDirectory: () => false,
-    };
+  process.env[GRAPH_FOLDER_NAME_KEY] = "graphs";
+  const writer = new PersistenceWriter();
+
+  const stubFs = (methodName: string, impl?: (arg0: any) => unknown) => {
     fs.promises = {
       ...fs.promises,
-      stat: jest.fn().mockImplementation(() => Promise.resolve(mockStat)),
-      mkdir: jest.fn().mockImplementation(() => Promise.resolve()),
+      [methodName]: jest.fn().mockImplementation(impl),
     };
-    const writer = new PersistenceWriter();
+  };
+  const notADir = { isDirectory: () => false };
+  const isADir = { isDirectory: () => true };
 
-    const response = await writer.createDB("my-social-network");
+  describe("persist db", () => {
+    it("should create db when it doesn't exist", async () => {
+      stubFs("stat", () => Promise.resolve(notADir));
+      stubFs("mkdir", () => Promise.resolve());
 
-    expect(response).toBe(true);
-    expect(fs.promises.mkdir).toHaveBeenCalledWith(
-      "root/databases/my-social-network"
-    );
+      const response = await writer.createDB("my-social-network");
+
+      expect(response).toBe(true);
+      expect(fs.promises.mkdir).toHaveBeenCalledWith(
+        "root/databases/my-social-network"
+      );
+    });
+
+    it("should not overwrite db if it exists", async () => {
+      stubFs("stat", () => Promise.resolve(isADir));
+      stubFs("mkdir");
+
+      const response = await writer.createDB("my-social-network");
+
+      expect(response).toBe(true);
+      expect(fs.promises.mkdir).not.toHaveBeenCalled();
+    });
+
+    it("should throw if creation fails", async () => {
+      stubFs("stat", () => Promise.resolve(notADir));
+      stubFs("mkdir", () => Promise.reject("BOOM!"));
+
+      expect(writer.createDB("my-social-network")).rejects.toEqual("BOOM!");
+    });
   });
 
-  it("should not overwrite db if it exists", async () => {
-    const mockStat = {
-      isDirectory: () => true,
-    };
-    fs.promises = {
-      ...fs.promises,
-      stat: jest.fn().mockImplementation(() => Promise.resolve(mockStat)),
-      mkdir: jest.fn(),
-    };
-    const writer = new PersistenceWriter();
+  describe("persist graph", () => {
+    it("should create graph when it doesn't exist", async () => {
+      stubFs("stat", () => Promise.resolve(notADir));
+      stubFs("mkdir", () => Promise.resolve());
 
-    const response = await writer.createDB("my-social-network");
+      const response = await writer.createGraph(
+        "my-social-network",
+        "new-york"
+      );
 
-    expect(response).toBe(true);
-    expect(fs.promises.mkdir).not.toHaveBeenCalled();
-  });
+      expect(response).toBe(true);
+      expect(fs.promises.mkdir).toHaveBeenCalledWith(
+        "root/databases/my-social-network/graphs/new-york"
+      );
+    });
 
-  it("should throw if creation fails", async () => {
-    const mockStat = {
-      isDirectory: () => false,
-    };
-    fs.promises = {
-      ...fs.promises,
-      stat: jest.fn().mockImplementation(() => Promise.resolve(mockStat)),
-      mkdir: jest.fn().mockImplementation(() => Promise.reject("BOOM!")),
-    };
-    const writer = new PersistenceWriter();
-    expect(writer.createDB("my-social-network")).rejects.toEqual("BOOM!");
+    it("should not overwrite graph if it exists", async () => {
+      stubFs("stat", () => Promise.resolve(isADir));
+      stubFs("mkdir");
+
+      const response = await writer.createGraph(
+        "my-social-network",
+        "califronia"
+      );
+
+      expect(response).toBe(true);
+      expect(fs.promises.mkdir).not.toHaveBeenCalled();
+    });
+
+    it("should throw if creation fails", async () => {
+      stubFs("stat", () => Promise.resolve(notADir));
+      stubFs("mkdir", () => Promise.reject("BOOM!"));
+
+      expect(
+        writer.createGraph("my-social-network", "california")
+      ).rejects.toEqual("BOOM!");
+    });
   });
 });

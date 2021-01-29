@@ -1,5 +1,6 @@
 import {
   DATABASE_FOLDER_NAME_KEY,
+  GRAPH_FOLDER_NAME_KEY,
   ROOT_DIRECTORY_PATH_KEY,
 } from "../constants";
 import { promises as fs } from "fs";
@@ -18,13 +19,21 @@ export default class PersistenceWriter {
     }
   }
 
+  private databaseDirLocation = (dbName: string) => {
+    return `${process.env[ROOT_DIRECTORY_PATH_KEY]}/${process.env[DATABASE_FOLDER_NAME_KEY]}/${dbName}`;
+  };
+
+  private graphDirLocation = (dbName: string, graphName: string) => {
+    return `${this.databaseDirLocation(dbName)}/${
+      process.env[GRAPH_FOLDER_NAME_KEY]
+    }/${graphName}`;
+  };
+
   createDB(dbName: string): Promise<boolean> {
-    const databaseFolderLocation =
-      process.env[ROOT_DIRECTORY_PATH_KEY] +
-      "/" +
-      process.env[DATABASE_FOLDER_NAME_KEY] +
-      "/" +
-      dbName;
-    return this.makeFolder(databaseFolderLocation);
+    return this.makeFolder(this.databaseDirLocation(dbName));
+  }
+
+  createGraph(dbName: string, graphName: string): Promise<boolean> {
+    return this.makeFolder(this.graphDirLocation(dbName, graphName));
   }
 }
