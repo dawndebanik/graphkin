@@ -1,4 +1,4 @@
-import PersistenceWriter from "../../src/persistance/persistence-writer";
+import DomainFs from "../../src/persistance/domain-fs";
 import fs from "fs";
 import {
   DATABASE_FOLDER_NAME_KEY,
@@ -11,7 +11,7 @@ describe("Persistence Writer", () => {
   process.env[ROOT_DIRECTORY_PATH_KEY] = "root";
   process.env[DATABASE_FOLDER_NAME_KEY] = "databases";
   process.env[GRAPH_FOLDER_NAME_KEY] = "graphs";
-  const writer = new PersistenceWriter();
+  const domainFs = new DomainFs();
 
   const stubFs = (methodName: string, impl?: (arg0: any) => unknown) => {
     fs.promises = {
@@ -27,7 +27,7 @@ describe("Persistence Writer", () => {
       stubFs("stat", () => Promise.resolve(notADir));
       stubFs("mkdir", () => Promise.resolve());
 
-      const response = await writer.createDB("my-social-network");
+      const response = await domainFs.createDB("my-social-network");
 
       expect(response).toBe(true);
       expect(fs.promises.mkdir).toHaveBeenCalledWith(
@@ -39,7 +39,7 @@ describe("Persistence Writer", () => {
       stubFs("stat", () => Promise.resolve(isADir));
       stubFs("mkdir");
 
-      const response = await writer.createDB("my-social-network");
+      const response = await domainFs.createDB("my-social-network");
 
       expect(response).toBe(true);
       expect(fs.promises.mkdir).not.toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe("Persistence Writer", () => {
       stubFs("stat", () => Promise.resolve(notADir));
       stubFs("mkdir", () => Promise.reject("BOOM!"));
 
-      expect(writer.createDB("my-social-network")).rejects.toEqual("BOOM!");
+      expect(domainFs.createDB("my-social-network")).rejects.toEqual("BOOM!");
     });
   });
 
@@ -58,7 +58,7 @@ describe("Persistence Writer", () => {
       stubFs("stat", () => Promise.resolve(notADir));
       stubFs("mkdir", () => Promise.resolve());
 
-      const response = await writer.createGraph(
+      const response = await domainFs.createGraph(
         "my-social-network",
         "new-york"
       );
@@ -73,7 +73,7 @@ describe("Persistence Writer", () => {
       stubFs("stat", () => Promise.resolve(isADir));
       stubFs("mkdir");
 
-      const response = await writer.createGraph(
+      const response = await domainFs.createGraph(
         "my-social-network",
         "califronia"
       );
@@ -87,8 +87,19 @@ describe("Persistence Writer", () => {
       stubFs("mkdir", () => Promise.reject("BOOM!"));
 
       expect(
-        writer.createGraph("my-social-network", "california")
+        domainFs.createGraph("my-social-network", "california")
       ).rejects.toEqual("BOOM!");
+    });
+  });
+
+  describe("fetch dbs", () => {
+    it("should fetch alls dbs", async () => {
+      stubFs("readdir", () => Promise.resolve(["db1", "db2"]));
+
+      const response = await domainFs.fetchDBs();
+
+      expect(response).toStrictEqual(["db1", "db2"]);
+      expect(fs.promises.readdir).toHaveBeenCalledWith("root/databases");
     });
   });
 });
