@@ -35,8 +35,31 @@ export const readDirIfExists = async (dirName: string): Promise<string[]> => {
   return fs.readdir(dirName);
 };
 
+export const readFileIfExists = async (location: string): Promise<unknown> => {
+  try {
+    const content = await fs.readFile(location, "utf-8");
+    return Promise.resolve(content);
+  } catch (e) {
+    return Promise.reject({});
+  }
+};
+
+export const createFile = async (
+  location: string,
+  fileData: unknown
+): Promise<boolean> => {
+  try {
+    await fs.writeFile(location, JSON.stringify(fileData), "utf-8");
+    return Promise.resolve(true);
+  } catch (e) {
+    return Promise.reject(false);
+  }
+};
+
 export default {
   dirExists,
   makeDirIfNotExists,
   readDirIfExists,
+  readFileIfExists,
+  createFile,
 };
