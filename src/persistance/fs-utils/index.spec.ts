@@ -89,4 +89,12 @@ describe("File system utils", () => {
       expect(await utils.readFileIfExists("Person.json")).toStrictEqual({});
     });
   });
+  describe("should create a file", () => {
+    it("should create write a file.", async () => {
+      stubFs("writeFile", () => Promise.resolve(true));
+      expect(
+        await utils.createFile("Person.json", { nodeIds: [3, 4, 5, 6] })
+      ).toStrictEqual(true);
+    });
+  });
 });
