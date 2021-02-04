@@ -1,10 +1,7 @@
 import DomainFs from ".";
 import utils from "../fs-utils";
-import {
-  DATABASE_FOLDER_NAME_KEY,
-  GRAPH_FOLDER_NAME_KEY,
-  ROOT_DIRECTORY_PATH_KEY,
-} from "../../constants";
+import {DATABASE_FOLDER_NAME_KEY, GRAPH_FOLDER_NAME_KEY, ROOT_DIRECTORY_PATH_KEY,} from "../../constants";
+import Node from "../../models/node";
 
 describe("Domain Fs", () => {
   process.env[ROOT_DIRECTORY_PATH_KEY] = "root";
@@ -50,5 +47,37 @@ describe("Domain Fs", () => {
 
     expect(response).toStrictEqual(["DB1"]);
     expect(utils.readDirIfExists).toHaveBeenCalledWith("root/databases");
+  });
+  it("should create a node", async () => {
+    utils.readFileIfExists = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        nodeIds: [3, 4, 5, 6],
+      })
+    );
+    utils.createFile = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(true));
+    const node = new Node(1, [], "Person", {
+      name: "Paula",
+    });
+    const response = await domainFs.createNode(
+      node,
+      "MySocialNetwork",
+      "California"
+    );
+    expect(response).toBe(true);
+    expect(utils.readFileIfExists).toHaveBeenCalledWith(
+      "root/databases/graphs/California/types/Person.json"
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/graphs/California/types/Person.json",
+      {
+        nodeIds: [3, 4, 5, 6, 1],
+      }
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/graphs/California/types/1.json",
+      node
+    );
   });
 });

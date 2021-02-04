@@ -13,7 +13,6 @@ export const dirExists = async (dirPath: string): Promise<boolean> => {
       throw err;
     }
   }
-
   return true;
 };
 
@@ -35,12 +34,11 @@ export const readDirIfExists = async (dirName: string): Promise<string[]> => {
   return fs.readdir(dirName);
 };
 
-export const readFileIfExists = async (location: string): Promise<unknown> => {
+export const readFileIfExists = async (location: string): Promise<string> => {
   try {
-    const content = await fs.readFile(location, "utf-8");
-    return Promise.resolve(content);
+    return await fs.readFile(location, "utf-8");
   } catch (e) {
-    return Promise.reject({});
+    return "";
   }
 };
 
@@ -50,9 +48,9 @@ export const createFile = async (
 ): Promise<boolean> => {
   try {
     await fs.writeFile(location, JSON.stringify(fileData), "utf-8");
-    return Promise.resolve(true);
+    return true;
   } catch (e) {
-    return Promise.reject(false);
+    return false;
   }
 };
 

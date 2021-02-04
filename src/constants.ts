@@ -10,3 +10,4 @@ export const GRAPH_FOLDER_NAME_KEY = "GRAPH_FOLDER_NAME";
 export const DATABASE_FOLDER_NAME_KEY = "DATABASE_FOLDER_NAME";
 export const FILE_EXTENSION = ".json";
 export const TYPES_FOLDER_NAME_KEY = "TYPES_FOLDER_NAME";
+export const TYPES_NODE_ID_KEY = "nodeIds";

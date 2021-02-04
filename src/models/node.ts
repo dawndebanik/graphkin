@@ -1,6 +1,6 @@
 export default class Node {
   constructor(
-    readonly id: number,
+    private readonly _id: number,
     private _relationshipIds: number[] = [],
     private _type: string,
     private _data: unknown = {}
@@ -16,6 +16,10 @@ export default class Node {
 
   get data(): unknown {
     return this._data;
+  }
+
+  get id(): number {
+    return this._id;
   }
 
   /*connectTo(otherNode: Node, relationshipId: number): void {
