@@ -6,17 +6,17 @@ export default class Node {
     private _data: unknown = {}
   ) {}
 
-  get relationshipIds(): number[] {
+  /*get relationshipIds(): number[] {
     return this.relationshipIds;
-  }
+  }*/
 
   get type(): string {
     return this._type;
   }
 
-  get data(): unknown {
+  /*get data(): unknown {
     return this._data;
-  }
+  }*/
 
   get id(): number {
     return this._id;

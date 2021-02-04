@@ -38,7 +38,7 @@ export const readFileIfExists = async (location: string): Promise<string> => {
   try {
     return await fs.readFile(location, "utf-8");
   } catch (e) {
-    return "";
+    return "{}";
   }
 };
 
@@ -46,12 +46,8 @@ export const createFile = async (
   location: string,
   fileData: unknown
 ): Promise<boolean> => {
-  try {
-    await fs.writeFile(location, JSON.stringify(fileData), "utf-8");
-    return true;
-  } catch (e) {
-    return false;
-  }
+  await fs.writeFile(location, JSON.stringify(fileData), "utf-8");
+  return true;
 };
 
 export default {

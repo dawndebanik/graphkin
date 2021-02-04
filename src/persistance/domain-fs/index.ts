@@ -42,22 +42,23 @@ export default class DomainFs {
     graphName: string
   ): Promise<boolean> => {
     try {
-      const typeFileLocation = `${this.typesDirLocation(dbName, graphName)}/
-    ${process.env[TYPES_FOLDER_NAME_KEY]}/${node.type}.${FILE_EXTENSION}`;
+      const typeFileLocation = `${this.typesDirLocation(dbName, graphName)}/${
+        node.type
+      }${FILE_EXTENSION}`;
       const content = JSON.parse(
-        await utils.readFileIfExists(typeFileLocation)
+        JSON.stringify(await utils.readFileIfExists(typeFileLocation))
       );
       const nodeIds: number[] = content[TYPES_NODE_ID_KEY];
       nodeIds.push(node.id);
       content[TYPES_NODE_ID_KEY] = nodeIds;
-      await utils.createFile(typeFileLocation, content);
       const nodeFileLocation = `${this.graphDirLocation(dbName, graphName)}/${
         node.id
-      }.${FILE_EXTENSION}`;
+      }${FILE_EXTENSION}`;
       await utils.createFile(nodeFileLocation, node);
-      return Promise.resolve(true);
+      await utils.createFile(typeFileLocation, content);
+      return true;
     } catch (e) {
-      return Promise.reject(e);
+      return false;
     }
   };
 }

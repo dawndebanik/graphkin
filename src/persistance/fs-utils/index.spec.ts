@@ -85,8 +85,8 @@ describe("File system utils", () => {
       });
     });
     it("should read a file and return empty object if file not exists", async () => {
-      stubFs("readFile", () => Promise.reject(""));
-      expect(await utils.readFileIfExists("Person.json")).toStrictEqual("");
+      stubFs("readFile", () => Promise.reject("{}"));
+      expect(await utils.readFileIfExists("Person.json")).toStrictEqual("{}");
     });
   });
   describe("should create a file", () => {
