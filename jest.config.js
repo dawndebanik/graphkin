@@ -5,7 +5,7 @@ module.exports = {
     "^.+\\.(ts|tsx)?$": "ts-jest",
     "^.+\\.(js|jsx)$": "babel-jest",
   },
-  coveragePathIgnorePatterns: ["tests"],
+  roots: ["src"],
   coverageReporters: ["html"],
   coverageThreshold: {
     global: {
