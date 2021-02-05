@@ -1,9 +1,9 @@
 export default class Node {
   constructor(
     private readonly _id: number,
-    private _relationshipIds: number[] = [],
+    //private relationshipIds: number[] = [],
     private _type: string,
-    private _data: unknown = {}
+    private data: unknown = {}
   ) {}
 
   /*get relationshipIds(): number[] {

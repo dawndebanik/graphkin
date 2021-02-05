@@ -63,7 +63,7 @@ describe("Domain Fs", () => {
     utils.createFile = jest
       .fn()
       .mockImplementation(() => Promise.resolve(true));
-    const node = new Node(1, [], "Person", {
+    const node = new Node(1, "Person", {
       name: "Paula",
     });
     const response = await domainFs.createNode(
@@ -93,7 +93,7 @@ describe("Domain Fs", () => {
     utils.createFile = jest
       .fn()
       .mockImplementation(() => Promise.reject(false));
-    const node = new Node(1, [], "Person", {
+    const node = new Node(1, "Person", {
       name: "Paula",
     });
     const response = await domainFs.createNode(
