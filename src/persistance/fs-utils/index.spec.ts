@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import utils, {dirExists, makeDirIfNotExists, readDirIfExists} from ".";
+import utils, { dirExists, makeDirIfNotExists, readDirIfExists } from ".";
 
 jest.mock("fs/promises");
 
