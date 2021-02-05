@@ -1,5 +1,7 @@
 import fs from "fs/promises";
 
+const NO_ENTRY = "ENOENT";
+
 export const dirExists = async (dirPath: string): Promise<boolean> => {
   try {
     const stat = await fs.stat(dirPath);
@@ -7,7 +9,7 @@ export const dirExists = async (dirPath: string): Promise<boolean> => {
       return false;
     }
   } catch (err) {
-    if (err.code === "ENOENT") {
+    if (err.code === NO_ENTRY) {
       return false;
     } else {
       throw err;
@@ -38,7 +40,7 @@ export const readFileIfExists = async (location: string): Promise<string> => {
   try {
     return await fs.readFile(location, "utf-8");
   } catch (e) {
-    if (e.code === "ENOENT") {
+    if (e.code === NO_ENTRY) {
       return "{}";
     } else {
       throw e;

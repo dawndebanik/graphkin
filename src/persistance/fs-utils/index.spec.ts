@@ -1,5 +1,5 @@
 import fs from "fs/promises";
-import utils, {dirExists, makeDirIfNotExists, readDirIfExists} from ".";
+import utils, { dirExists, makeDirIfNotExists, readDirIfExists } from ".";
 
 jest.mock("fs/promises");
 
@@ -87,6 +87,12 @@ describe("File system utils", () => {
     it("should read a file and return empty object if file not exists", async () => {
       stubFs("readFile", () => Promise.reject({ code: "ENOENT" }));
       expect(await utils.readFileIfExists("Person.json")).toStrictEqual("{}");
+    });
+    it("should try to read a file and throw error", () => {
+      stubFs("readFile", () => Promise.reject({ code: "SOMETHING_BAD" }));
+      expect(utils.readFileIfExists("Person.json")).rejects.toBe({
+        code: "SOMETHING_BAD",
+      });
     });
   });
   describe("should create a file", () => {
