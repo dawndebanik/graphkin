@@ -38,7 +38,11 @@ export const readFileIfExists = async (location: string): Promise<string> => {
   try {
     return await fs.readFile(location, "utf-8");
   } catch (e) {
-    return "{}";
+    if (e.code === "ENOENT") {
+      return "{}";
+    } else {
+      throw e;
+    }
   }
 };
 
