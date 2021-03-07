@@ -7,6 +7,7 @@ import {
   TYPES_FOLDER_NAME_KEY,
 } from "../../constants";
 import Node from "../../models/node";
+import Relationship from "../../models/relationship";
 
 describe("Domain Fs", () => {
   process.env[ROOT_DIRECTORY_PATH_KEY] = "root";
@@ -54,7 +55,7 @@ describe("Domain Fs", () => {
     expect(response).toStrictEqual(["DB1"]);
     expect(utils.readDirIfExists).toHaveBeenCalledWith("root/databases");
   });
-  it("should create a node", async () => {
+  it("should create a node and append to types file", async () => {
     utils.readFileIfExists = jest.fn().mockImplementation(() =>
       Promise.resolve({
         nodeIds: [3, 4, 5, 6],
@@ -86,21 +87,96 @@ describe("Domain Fs", () => {
       }
     );
   });
-  it("should NOT create a node", async () => {
+  it("should create a node and make new types file", async () => {
     utils.readFileIfExists = jest
       .fn()
-      .mockImplementation(() => Promise.resolve("{}"));
+      .mockImplementation(() => Promise.resolve(undefined));
     utils.createFile = jest
       .fn()
-      .mockImplementation(() => Promise.reject(false));
+      .mockImplementation(() => Promise.resolve(true));
     const node = new Node(1, "Person", [], {
       name: "Paula",
     });
     const response = await domainFs.createNode(
       node,
-      "MySocialNetwork2",
+      "MySocialNetwork",
       "California"
     );
-    expect(response).toBe(false);
+    expect(response).toBe(true);
+    expect(utils.readFileIfExists).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/graphs/California/types/Person.json"
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/graphs/California/types/Person.json",
+      {
+        nodeIds: [1],
+      }
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/graphs/California/1.json",
+      node
+    );
+  });
+
+  it("should create a relationship and append to types file", async () => {
+    utils.readFileIfExists = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        relationshipIds: [3, 4, 5, 6],
+      })
+    );
+    utils.createFile = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(true));
+    const relationship = new Relationship(42, "IsFriendOf", 10, 20, {});
+
+    const response = await domainFs.createRelationship(
+      relationship,
+      "MySocialNetwork"
+    );
+
+    expect(response).toBe(true);
+    expect(utils.readFileIfExists).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/relationships/types/IsFriendOf.json"
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/relationships/42.json",
+      relationship
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/relationships/types/IsFriendOf.json",
+      {
+        relationshipIds: [3, 4, 5, 6, 42],
+      }
+    );
+  });
+
+  it("should create a relationship and make new types file", async () => {
+    utils.readFileIfExists = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(undefined));
+    utils.createFile = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(true));
+    const relationship = new Relationship(42, "IsFriendOf", 1, 2);
+
+    const response = await domainFs.createRelationship(
+      relationship,
+      "MySocialNetwork"
+    );
+
+    expect(response).toBe(true);
+    expect(utils.readFileIfExists).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/relationships/types/IsFriendOf.json"
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/relationships/types/IsFriendOf.json",
+      {
+        relationshipIds: [42],
+      }
+    );
+    expect(utils.createFile).toHaveBeenCalledWith(
+      "root/databases/MySocialNetwork/relationships/42.json",
+      relationship
+    );
   });
 });
