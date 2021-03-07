@@ -5,9 +5,13 @@ import {
   GRAPH_FOLDER_NAME_KEY,
   ROOT_DIRECTORY_PATH_KEY,
   TYPES_FOLDER_NAME_KEY,
-  TYPES_NODE_ID_KEY,
 } from "../../constants";
 import Node from "../../models/node";
+import Relationship from "../../models/relationship";
+import {
+  NodeTypeFileContent,
+  RelationshipTypeFileContent,
+} from "../../types/persistence";
 
 export default class DomainFs {
   private databaseDirRoot = `${process.env[ROOT_DIRECTORY_PATH_KEY]}/${process.env[DATABASE_FOLDER_NAME_KEY]}`;
@@ -41,24 +45,60 @@ export default class DomainFs {
     dbName: string,
     graphName: string
   ): Promise<boolean> => {
-    try {
-      const typeFileLocation = `${this.typesDirLocation(dbName, graphName)}/${
-        node.type
-      }${FILE_EXTENSION}`;
-      const content = JSON.parse(
-        JSON.stringify(await utils.readFileIfExists(typeFileLocation))
-      );
-      const nodeIds: number[] = content[TYPES_NODE_ID_KEY];
-      nodeIds.push(node.id);
-      content[TYPES_NODE_ID_KEY] = nodeIds;
-      const nodeFileLocation = `${this.graphDirLocation(dbName, graphName)}/${
-        node.id
-      }${FILE_EXTENSION}`;
-      await utils.createFile(nodeFileLocation, node);
-      await utils.createFile(typeFileLocation, content);
-      return true;
-    } catch (e) {
-      return false;
+    const typesFilePath = `${this.typesDirLocation(dbName, graphName)}/${
+      node.type
+    }${FILE_EXTENSION}`;
+    const nodeFilePath = `${this.graphDirLocation(dbName, graphName)}/${
+      node.id
+    }${FILE_EXTENSION}`;
+
+    let fileContent: NodeTypeFileContent;
+    const fileContentString: string | undefined = JSON.stringify(
+      await utils.readFileIfExists(typesFilePath)
+    );
+
+    if (fileContentString) {
+      fileContent = JSON.parse(fileContentString);
+      fileContent.nodeIds.push(node.id);
+    } else {
+      fileContent = {
+        nodeIds: [node.id],
+      };
     }
+
+    await utils.createFile(typesFilePath, fileContent);
+    await utils.createFile(nodeFilePath, node);
+
+    return true;
+  };
+
+  createRelationship = async (
+    relationship: Relationship,
+    dbName: string
+  ): Promise<boolean> => {
+    const relationshipDirRoot = `${this.databaseDirLocation(
+      dbName
+    )}/relationships`;
+    const relationshipFilePath = `${relationshipDirRoot}/${relationship.id}${FILE_EXTENSION}`;
+    const typeFilePath = `${relationshipDirRoot}/types/${relationship.type}${FILE_EXTENSION}`;
+
+    let fileContent: RelationshipTypeFileContent;
+    const fileContentString = JSON.stringify(
+      await utils.readFileIfExists(typeFilePath)
+    );
+
+    if (fileContentString) {
+      fileContent = JSON.parse(fileContentString);
+      fileContent.relationshipIds.push(relationship.id);
+    } else {
+      fileContent = {
+        relationshipIds: [relationship.id],
+      };
+    }
+
+    await utils.createFile(relationshipFilePath, relationship);
+    await utils.createFile(typeFilePath, fileContent);
+
+    return true;
   };
 }

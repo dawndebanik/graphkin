@@ -36,12 +36,14 @@ export const readDirIfExists = async (dirName: string): Promise<string[]> => {
   return fs.readdir(dirName);
 };
 
-export const readFileIfExists = async (location: string): Promise<string> => {
+export const readFileIfExists = async (
+  location: string
+): Promise<string | undefined> => {
   try {
     return await fs.readFile(location, "utf-8");
   } catch (e) {
     if (e.code === NO_ENTRY) {
-      return "{}";
+      return undefined;
     } else {
       throw e;
     }
