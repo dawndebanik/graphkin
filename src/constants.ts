@@ -16,5 +16,5 @@ export enum HttpStatusCodes {
   BAD_REQUEST = 400,
   INTERNAL_SERVER_ERROR = 500,
   CREATED = 201,
-  OK_200 = 200
+  OK_200 = 200,
 }
