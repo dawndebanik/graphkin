@@ -12,7 +12,7 @@ import {
   NodeTypeFileContent,
   RelationshipTypeFileContent,
 } from "../../types/persistence";
-import 'dotenv/config'
+import "dotenv/config";
 
 // TODO: use default fallback values for env variables if not set
 
@@ -23,7 +23,9 @@ export default class DomainFs {
     `${this.databaseDirRoot}/${dbName}`;
 
   private getGraphDirRoot = (dbName: string): string =>
-    `${this.getDatabaseDirLocation(dbName)}/${process.env[GRAPH_FOLDER_NAME_KEY]}`;
+    `${this.getDatabaseDirLocation(dbName)}/${
+      process.env[GRAPH_FOLDER_NAME_KEY]
+    }`;
 
   private getGraphDirLocation = (dbName: string, graphName: string): string => {
     return `${this.getGraphDirRoot(dbName)}/${graphName}`;
@@ -37,7 +39,10 @@ export default class DomainFs {
   createDBIfNotExists = (dbName: string): Promise<boolean> =>
     utils.makeDirIfNotExists(this.getDatabaseDirLocation(dbName));
 
-  createGraphIfNotExists = (dbName: string, graphName: string): Promise<boolean> =>
+  createGraphIfNotExists = (
+    dbName: string,
+    graphName: string
+  ): Promise<boolean> =>
     utils.makeDirIfNotExists(this.getGraphDirLocation(dbName, graphName));
 
   fetchDBList = (): Promise<string[]> =>

@@ -4,11 +4,12 @@
   "description": "",
   "main": "build/routes/index.js",
   "scripts": {
-    "start": "npm run build && node .",
+    "start": "npm run clean:build && node .",
     "clean": "rm -rf build",
-    "build": "npm run clean && node_modules/.bin/tsc",
-    "lint:check": "node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet",
-    "lint:fix": "node_modules/.bin/eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "build": "node_modules/.bin/tsc",
+    "clean:build": "npm run clean && npm run build",
+    "lint:check": "node_modules/.bin/eslint \"*/**/*.{js,ts,tsx}\" --quiet",
+    "lint:fix": "node_modules/.bin/eslint \"*/**/*.{js,ts,tsx}\" --quiet --fix",
     "test": "node_modules/.bin/jest .",
     "test:coverage": "node_modules/.bin/jest . --coverage"
   },
