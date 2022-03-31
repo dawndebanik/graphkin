@@ -12,6 +12,9 @@ import {
   NodeTypeFileContent,
   RelationshipTypeFileContent,
 } from "../../types/persistence";
+import 'dotenv/config'
+
+// TODO: use default fallback values for env variables if not set
 
 export default class DomainFs {
   private databaseDirRoot = `${process.env[ROOT_DIRECTORY_PATH_KEY]}/${process.env[DATABASE_FOLDER_NAME_KEY]}`;
