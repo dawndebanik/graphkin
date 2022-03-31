@@ -16,28 +16,28 @@ import {
 export default class DomainFs {
   private databaseDirRoot = `${process.env[ROOT_DIRECTORY_PATH_KEY]}/${process.env[DATABASE_FOLDER_NAME_KEY]}`;
 
-  private databaseDirLocation = (dbName: string): string =>
+  private getDatabaseDirLocation = (dbName: string): string =>
     `${this.databaseDirRoot}/${dbName}`;
 
-  private graphDirRoot = (dbName: string): string =>
-    `${this.databaseDirLocation(dbName)}/${process.env[GRAPH_FOLDER_NAME_KEY]}`;
+  private getGraphDirRoot = (dbName: string): string =>
+    `${this.getDatabaseDirLocation(dbName)}/${process.env[GRAPH_FOLDER_NAME_KEY]}`;
 
-  private graphDirLocation = (dbName: string, graphName: string): string => {
-    return `${this.graphDirRoot(dbName)}/${graphName}`;
+  private getGraphDirLocation = (dbName: string, graphName: string): string => {
+    return `${this.getGraphDirRoot(dbName)}/${graphName}`;
   };
-  private typesDirLocation = (dbName: string, graphName: string): string => {
-    return `${this.graphDirLocation(dbName, graphName)}/${
+  private getTypesDirLocation = (dbName: string, graphName: string): string => {
+    return `${this.getGraphDirLocation(dbName, graphName)}/${
       process.env[TYPES_FOLDER_NAME_KEY]
     }`;
   };
 
-  createDB = (dbName: string): Promise<boolean> =>
-    utils.makeDirIfNotExists(this.databaseDirLocation(dbName));
+  createDBIfNotExists = (dbName: string): Promise<boolean> =>
+    utils.makeDirIfNotExists(this.getDatabaseDirLocation(dbName));
 
-  createGraph = (dbName: string, graphName: string): Promise<boolean> =>
-    utils.makeDirIfNotExists(this.graphDirLocation(dbName, graphName));
+  createGraphIfNotExists = (dbName: string, graphName: string): Promise<boolean> =>
+    utils.makeDirIfNotExists(this.getGraphDirLocation(dbName, graphName));
 
-  fetchDBs = (): Promise<string[]> =>
+  fetchDBList = (): Promise<string[]> =>
     utils.readDirIfExists(this.databaseDirRoot);
 
   createNode = async (
@@ -45,10 +45,10 @@ export default class DomainFs {
     dbName: string,
     graphName: string
   ): Promise<boolean> => {
-    const typesFilePath = `${this.typesDirLocation(dbName, graphName)}/${
+    const typesFilePath = `${this.getTypesDirLocation(dbName, graphName)}/${
       node.type
     }${FILE_EXTENSION}`;
-    const nodeFilePath = `${this.graphDirLocation(dbName, graphName)}/${
+    const nodeFilePath = `${this.getGraphDirLocation(dbName, graphName)}/${
       node.id
     }${FILE_EXTENSION}`;
 
@@ -76,7 +76,7 @@ export default class DomainFs {
     relationship: Relationship,
     dbName: string
   ): Promise<boolean> => {
-    const relationshipDirRoot = `${this.databaseDirLocation(
+    const relationshipDirRoot = `${this.getDatabaseDirLocation(
       dbName
     )}/relationships`;
     const relationshipFilePath = `${relationshipDirRoot}/${relationship.id}${FILE_EXTENSION}`;

@@ -21,7 +21,7 @@ describe("Domain Fs", () => {
       .fn()
       .mockImplementation(() => Promise.resolve(true));
 
-    const response = await domainFs.createDB("my-social-network");
+    const response = await domainFs.createDBIfNotExists("my-social-network");
 
     expect(response).toBe(true);
     expect(utils.makeDirIfNotExists).toHaveBeenCalledWith(
@@ -34,7 +34,7 @@ describe("Domain Fs", () => {
       .fn()
       .mockImplementation(() => Promise.resolve(true));
 
-    const response = await domainFs.createGraph(
+    const response = await domainFs.createGraphIfNotExists(
       "my-social-network",
       "new-york"
     );
@@ -50,7 +50,7 @@ describe("Domain Fs", () => {
       .fn()
       .mockImplementation(() => Promise.resolve(["DB1"]));
 
-    const response = await domainFs.fetchDBs();
+    const response = await domainFs.fetchDBList();
 
     expect(response).toStrictEqual(["DB1"]);
     expect(utils.readDirIfExists).toHaveBeenCalledWith("root/databases");
