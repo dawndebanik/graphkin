@@ -8,7 +8,7 @@ export const dirExists = async (dirPath: string): Promise<boolean> => {
     if (!stat.isDirectory()) {
       return false;
     }
-  } catch (err) {
+  } catch (err: any) {
     if (err.code === NO_ENTRY) {
       return false;
     } else {
@@ -41,7 +41,7 @@ export const readFileIfExists = async (
 ): Promise<string | undefined> => {
   try {
     return await fs.readFile(location, "utf-8");
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === NO_ENTRY) {
       return undefined;
     } else {
